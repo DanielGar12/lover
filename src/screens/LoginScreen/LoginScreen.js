@@ -1,10 +1,18 @@
-import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native'
+import { View, Text, StyleSheet, Image, useWindowDimensions, Button, Pressable} from 'react-native'
 import Logo from '../../../assets/adaptive-icon.png'
 import React from 'react'
 import CustomInput from '../../components/CustomInput'
+import CustomButton from '../../components/CustomButton'
 
 
 const LoginScreen = () => {
+
+    const onLoginPress = () => {
+        console.log('nada');
+    }
+    const onRegisterPress = () =>{
+        console.log('Nothing')
+    }
 
     const {height} = useWindowDimensions();
   return (
@@ -15,6 +23,12 @@ const LoginScreen = () => {
       <Text/>
       <CustomInput placeholder={'Username'}/>
       <CustomInput placeholder={'Password'} secureTextEntry={true}/>
+
+      <CustomButton onPress={onLoginPress} text={'Login'}/>
+
+      <Text>Not a user? Register here</Text>
+      <CustomButton onPress={onRegisterPress} text={'Register'}/>
+     
       
     </View>
   )
@@ -36,6 +50,7 @@ const styles = StyleSheet.create({
         maxWidth: 300, 
         maxHeight: 200, 
     },
+
 
 
 
