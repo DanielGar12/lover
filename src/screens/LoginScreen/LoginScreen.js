@@ -3,15 +3,21 @@ import Logo from '../../../assets/adaptive-icon.png'
 import React from 'react'
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
+import { useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+import {useForm, Controller} from 'react-hook-form'
 
 
 const LoginScreen = () => {
-
-    const onLoginPress = () => {
+  const navigation = useNavigation();
+  const {control, handleSubmit, formState: {errors}} = useForm();
+  
+  const onLoginPress = () => {
         console.log('nada');
     }
     const onRegisterPress = () =>{
-        console.log('Nothing')
+        console.log('Nav to register');
+        navigation.navigate('Register');
     }
 
     const {height} = useWindowDimensions();
@@ -21,10 +27,21 @@ const LoginScreen = () => {
       style={[styles.logo, {height: height * 0.3}]}
       />
       <Text/>
-      <CustomInput placeholder={'Username'}/>
-      <CustomInput placeholder={'Password'} secureTextEntry={true}/>
+      <CustomInput 
+      placeholder={'Username'}
+      control={control}
+      name={'username'}
+      rules={{required: 'Username is required'}}
+      />
+      <CustomInput
+      placeholder={'Password'} 
+      secureTextEntry={true}
+      control={control}
+      name={'password'}
+      rules={{required: 'Password is required'}}
+      />
 
-      <CustomButton onPress={onLoginPress} text={'Login'}/>
+      <CustomButton onPress={handleSubmit(onLoginPress)} text={'Login'}/>
 
       <Text>Not a user? Register here</Text>
       <CustomButton onPress={onRegisterPress} text={'Register'}/>
@@ -49,6 +66,7 @@ const styles = StyleSheet.create({
         width: '70%',
         maxWidth: 300, 
         maxHeight: 200, 
+        marginVertical: 10,
     },
 
 
