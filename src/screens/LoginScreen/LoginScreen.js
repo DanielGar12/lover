@@ -14,6 +14,7 @@ const LoginScreen = () => {
   
   const onLoginPress = () => {
         console.log('nada');
+        navigation.navigate('HomeScreen')
     }
     const onRegisterPress = () =>{
         console.log('Nav to register');
