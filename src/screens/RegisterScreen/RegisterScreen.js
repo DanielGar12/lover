@@ -1,18 +1,39 @@
-import { View, Text, StyleSheet, Image, useWindowDimensions, Button, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Image, useWindowDimensions, Alert} from 'react-native'
 import React from 'react'
 import CustomButton from '../../components/CustomButton'
 import CustomInput from '../../components/CustomInput';
 import { useNavigation } from '@react-navigation/native';
 import Logo from '../../../assets/adaptive-icon.png' 
 import {useForm, Controller} from 'react-hook-form'
+import axios from 'axios'
+
 const RegisterScreen = () => {
 
     const navigation = useNavigation();
 
     const {control, handleSubmit, formState: {errors}} = useForm();
   
-    const onRegisterPress = () => {
-          console.log('nada');
+    const onRegisterPress = async (data) => {
+          try{
+            const res = await axios.post('http://localhost:3000/users', {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                username: data.username,
+                password: data.password
+            })
+            if(res.status === 201){
+                console.log('Successfully created the user');
+                Alert.alert('Success', 'User has been created successfully!!')
+                navigation.navigate('Login');
+            }
+            else{
+                console.log('There was an error making the user')
+            }
+
+          }
+          catch(error){
+            console.error('Something went wrong during registration (catch): ', error)
+          }
       }
       const onLoginPress = () =>{
           console.log('Nav to Login');
@@ -30,13 +51,13 @@ const RegisterScreen = () => {
           placeholder={'First Name'}
           control={control}
           rules={{required: 'First name is required'}}
-          name={'firstname'}
+          name={'firstName'}
           />
           <CustomInput 
           placeholder={'Last Name'}
           control={control}
           rules={{required: 'Last name is required'}}
-          name={'lastname'}
+          name={'lastName'}
           />
           <CustomInput 
           placeholder={'Username'}

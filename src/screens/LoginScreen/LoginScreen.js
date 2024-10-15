@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, useWindowDimensions, Button, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Image, useWindowDimensions, Button, Pressable, Alert} from 'react-native'
 import Logo from '../../../assets/adaptive-icon.png'
 import React from 'react'
 import CustomInput from '../../components/CustomInput'
@@ -6,15 +6,36 @@ import CustomButton from '../../components/CustomButton'
 import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useForm, Controller} from 'react-hook-form'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const {control, handleSubmit, formState: {errors}} = useForm();
   
-  const onLoginPress = () => {
-        console.log('nada');
-        navigation.navigate('HomeScreen')
+  const onLoginPress = async(data) => {
+        try{
+          const res = await axios.post('http://localhost:3000/login', {
+            username: data.username,
+            password: data.password
+          })
+
+          if(res.status === 200){
+            // const User = res.data.User
+            console.log('Login successful')
+            // await AsyncStorage.setItem('User', User);
+            navigation.navigate('HomeScreen');
+          }
+          else{
+            console.log('There was an error in the login')
+          }
+          
+        }
+        catch(error){
+          Alert.alert('Failed to Login', 'Wrong username or password')
+          console.error('Error when logging in: ', error)
+        }
     }
     const onRegisterPress = () =>{
         console.log('Nav to register');
