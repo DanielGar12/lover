@@ -25,7 +25,7 @@ const LoginScreen = () => {
             // const User = res.data.User
             console.log('Login successful')
             // await AsyncStorage.setItem('User', User);
-            navigation.navigate('HomeScreen');
+            navigation.navigate('BottomNavBar');
           }
           else{
             console.log('There was an error in the login')
