@@ -10,7 +10,7 @@ const ChatScreen = () => {
         <Ionicons name={'image'}  size ={20}style={{marginLeft: 30, alignSelf: 'center'}} />
         <View style={styles.inputBox}>
             <TextInput placeholder={'Input text here'}/>
-            <Ionicons name={'send'} style={{alignSelf: 'center'}}size={15}/>
+            <Ionicons name={'send'} style={{alignSelf: 'center'}}size={15} onPress={() => console.log('Nothing')}/>
 
         </View>
         
