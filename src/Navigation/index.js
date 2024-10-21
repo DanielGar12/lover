@@ -6,6 +6,7 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 import BottomNavigationBar from './BottomNavigationBar';
+import ConnectScreen from '../screens/ConnectScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ const Navigation = () => {
             <Stack.Screen name='Login' component={LoginScreen}/>
             <Stack.Screen name='Register' component={RegisterScreen}/>
             <Stack.Screen name='BottomNavBar' component={BottomNavigationBar}/>
-
+            <Stack.Screen name='ConnectScreen' component={ConnectScreen}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

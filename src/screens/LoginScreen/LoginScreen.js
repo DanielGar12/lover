@@ -22,9 +22,13 @@ const LoginScreen = () => {
           })
 
           if(res.status === 200){
-            // const User = res.data.User
-            console.log('Login successful')
-            // await AsyncStorage.setItem('User', User);
+            const user = res.data.user; // Assuming the API returns user details as 'user'
+            console.log('Login successful');
+
+            // Store the user data in AsyncStorage
+            await AsyncStorage.setItem('User', JSON.stringify(user)); // Store the user object
+
+            // Navigate to the next screen
             navigation.navigate('BottomNavBar');
           }
           else{
