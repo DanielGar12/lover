@@ -21,7 +21,7 @@ const ConnectScreen = () => {
            
 
     
-            const response = await axios.post('http://192.168.1.195:3000/invite/send', {
+            const response = await axios.post('http://10.125.153.173:3000/invite/send', {
                 senderUsername: parsedUser.username,  // Use stored sender's username
                 receiverUsername: connection, // Username entered in the input field
             });

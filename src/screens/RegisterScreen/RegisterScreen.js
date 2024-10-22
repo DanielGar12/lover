@@ -15,7 +15,7 @@ const RegisterScreen = () => {
   
     const onRegisterPress = async (data) => {
           try{
-            const res = await axios.post('http://192.168.1.195:3000/users', {
+            const res = await axios.post('http://10.125.153.173:3000/users', {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 username: data.username,
