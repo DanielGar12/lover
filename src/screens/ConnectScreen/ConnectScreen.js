@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Alert } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons'
 import CustomInput from '../../components/CustomInput'
 import {useForm, Controller} from 'react-hook-form'
@@ -11,6 +11,7 @@ const ConnectScreen = () => {
   
     const {control, handleSubmit, formState: {errors}} = useForm()
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(false); // Add loading state
 
     const onConnectPress = async (data) => {
         const { connection } = data;
@@ -19,7 +20,7 @@ const ConnectScreen = () => {
             const user = await AsyncStorage.getItem('User'); // Retrieve the stored user data
             const parsedUser = JSON.parse(user); // Parse the stored JSON string to get the user object
            
-
+            setLoading(true);
     
             const response = await axios.post('http://10.125.153.173:3000/invite/send', {
                 senderUsername: parsedUser.username,  // Use stored sender's username
@@ -38,6 +39,9 @@ const ConnectScreen = () => {
             console.error('Connection error:', error);
             Alert.alert('Error', 'An error occurred. Please try again later.');
         }
+        finally{
+            setLoading(false)
+        }
     };
   
     return (
@@ -55,7 +59,11 @@ const ConnectScreen = () => {
       
       />
 
-      <CustomButton text={'Connect'} onPress={handleSubmit(onConnectPress)}/>
+{loading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                    <CustomButton text={'Connect'} onPress={handleSubmit(onConnectPress)} />
+                )}
       </View>
     </View>
   )

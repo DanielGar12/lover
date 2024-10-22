@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import CustomButton from '../../components/CustomButton'
 
 
 
@@ -14,23 +15,27 @@ const InvitationScreen = () => {
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
-        const fetchInvitations = async () => {
-            try {
-              const user = await AsyncStorage.getItem('User');
-              const parsedUser = JSON.parse(user);
+      const fetchInvitations = async () => {
+        try {
+            const user = await AsyncStorage.getItem('User');
+            const parsedUser = JSON.parse(user);
+    
           
-              const response = await axios.get(`http://10.125.153.173:3000/invitations/${parsedUser.username}`);
-              if (response.status === 200) {
+            const response = await axios.get(`http://10.125.153.173:3000/invitations/${parsedUser.username}?status=pending`);
+            
+            if (response.status === 200) {
                 setInvitations(response.data.invitations); 
-              } else {
+            } else {
                 console.error('Failed to fetch invitations');
-              }
-            } catch (error) {
-              console.error('Error fetching invitations:', error);
-            } finally {
-              setLoading(false);
             }
-          };
+        } catch (error) {
+            console.error('Error fetching invitations:', error);
+            Alert.alert('Error', 'Failed to load invitations');
+        } finally {
+            setLoading(false);
+        }
+    };
+    
           
   
       fetchInvitations();
@@ -52,21 +57,24 @@ const InvitationScreen = () => {
         console.error('Error accepting invite', error)
     }
   }
-  onRejectPress = async(inviteId) => {
-    try{
-        const res = await axios.post('http://10.125.153.173:3000/invite/respond', {
-            inviteId: inviteId,
-            status: 'rejected'
-        })
-        if(res.status === 200){
-            Alert.alert('Success', 'Invitation Rejected');
-            setInvitations(invitations.filter(invite => invite._id !== inviteId));
-        }
+  const onRejectPress = async (inviteId) => {
+    try {
+      const res = await axios.post('http://10.125.153.173:3000/invite/respond', {
+        inviteId: inviteId,
+        status: 'rejected',
+      });
+      
+      if (res.status === 200) {
+        Alert.alert('Success', 'Invitation rejected');
+      
+        setInvitations(invitations.filter(invite => invite._id !== inviteId));
+      }
+    } catch (error) {
+      console.error('Error rejecting invite:', error);
+      Alert.alert('Error', 'Failed to reject invitation');
     }
-    catch(error){
-        console.error('Error rejecting invite:', error);
-    }
-  }
+  };
+  
 
   const navigation = useNavigation();
 
@@ -75,7 +83,9 @@ const InvitationScreen = () => {
       <Text>{item.senderUsername} sent you an invitation</Text>
       <View style={styles.buttons}>
         <Button title="Accept" onPress={() => onAcceptPress(item._id)} />
+        {/* <CustomButton text={'Accept'} onPress={onAcceptPress(item._id)}/> */}
         <Button title="Reject" onPress={() => onRejectPress(item._id)} />
+        {/* <CustomButton text={'Reject'}/> */}
       </View>
     </View>
   );
