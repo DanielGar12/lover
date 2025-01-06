@@ -21,7 +21,7 @@ const InvitationScreen = () => {
             const parsedUser = JSON.parse(user);
     
           
-            const response = await axios.get(`http://10.125.153.173:3000/invitations/${parsedUser.username}?status=pending`);
+            const response = await axios.get(`http://10.0.2.2:3000/invitations/${parsedUser.username}?status=pending`);
             
             if (response.status === 200) {
                 setInvitations(response.data.invitations); 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     topBox: {
         borderBottomWidth: 1,
     borderColor: 'gray',
-    height: 50,
+    height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',

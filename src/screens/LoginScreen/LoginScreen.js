@@ -16,7 +16,7 @@ const LoginScreen = () => {
   
   const onLoginPress = async(data) => {
         try{
-          const res = await axios.post('http://10.125.153.173:3000/login', {
+          const res = await axios.post('http://10.0.2.2:3000/login', {
             username: data.username,
             password: data.password
           })

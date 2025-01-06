@@ -7,6 +7,7 @@ import CustomButton from '../../components/CustomButton'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
+
 const ConnectScreen = () => {
   
     const {control, handleSubmit, formState: {errors}} = useForm()
@@ -18,11 +19,16 @@ const ConnectScreen = () => {
     
         try {
             const user = await AsyncStorage.getItem('User'); // Retrieve the stored user data
+            if(!user){
+                Alert.alert('Error', 'The user was not found?');
+                return;
+            }
+            
             const parsedUser = JSON.parse(user); // Parse the stored JSON string to get the user object
            
             setLoading(true);
     
-            const response = await axios.post('http://10.125.153.173:3000/invite/send', {
+            const response = await axios.post('http://10.0.2.2:3000/invite/send', {
                 senderUsername: parsedUser.username,  // Use stored sender's username
                 receiverUsername: connection, // Username entered in the input field
             });
@@ -36,8 +42,14 @@ const ConnectScreen = () => {
                 Alert.alert('Error','Failed to send invite. Please try again.');
             }
         } catch (error) {
+            if (error.response && error.response.status === 404){
+                Alert.alert("Error", 'The username does not exist');
+
+            }
+            else{
             console.error('Connection error:', error);
             Alert.alert('Error', 'An error occurred. Please try again later.');
+            }
         }
         finally{
             setLoading(false)
@@ -45,6 +57,7 @@ const ConnectScreen = () => {
     };
   
     return (
+
     <View style={styles.container}>
         <Ionicons name={'heart'} size={100} color={'red'}/>
       <Text style={styles.title}>Connect with your loved one</Text>
@@ -65,6 +78,7 @@ const ConnectScreen = () => {
                     <CustomButton text={'Connect'} onPress={handleSubmit(onConnectPress)} />
                 )}
       </View>
+               <Ionicons color={'gray'}name={"close"} size={25} onPress={() => navigation.navigate("BottomNavBar")}  style={{ position: 'absolute', top: 5, left: 15 }} /> 
     </View>
   )
 }
@@ -82,7 +96,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 28,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        alignItems: 'center'
     },
 
     components: {
